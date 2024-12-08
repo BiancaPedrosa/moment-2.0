@@ -1,0 +1,117 @@
+<!DOCTYPE HTML>
+<html lang="pt=br">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+   <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-dark.css">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+   <title>Demo Moment.js</title>
+</head>
+<body>
+   <div class="w3-panel  w3-teal w3-center">
+      <h1>Demo do moment.js</h1>
+   </div>
+   <div class="w3-row-padding">
+         <div class="w3-half">
+            <fieldset>
+               <legend class="w3-monospace">Datas</legend>
+                  <div class="w3-half">
+                     <label for="databr1">Data 1</label>
+                     <input class="w3-input w3-border" type="datetime-local" name="databr1" id="databr1">
+                  </div>
+                  <div class="w3-half">
+                     <label for="databr2">Data 2</label>
+                     <input class="w3-input w3-border" type="datetime-local" name="databr2" id="databr2">
+                  </div>
+               </fieldset>
+               <div class="w3-container w3-gray  ">
+                  <button id="btFormat"class="w3-button w3-block w3-hover-black">Formatar</button>
+               </div>
+      </div>
+      <div class="w3-half">
+         <fieldset>
+            <legend>Time</legend>
+               <div class="w3-quarter">
+                  <label for="horabr1">Time 1</label>
+                  <input class="w3-input w3-border" type="time" name="horabr1"id="horabr1">    
+               </div>
+               <div class="w3-quarter">
+                  <label for="horabr2">Time 2</label>
+                  <input class="w3-input w3-border" type="time" name="horabr2"id="horabr2">    
+                </div>
+         </fieldset>
+         <div class="w3-container w3-gray">
+            <button id="btCalculate"class="w3-button w3-block w3-hover-black">Calcular diferença horas</button>
+         </div>
+      </div>
+   </div>
+   <div  class="w3-container">
+      <h2 class="w3-teal">Resultados</h2>   
+      <div id="card-container" class="w3-row-padding w3-margin-top">
+   </div>  
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+<script>
+    moment.locale('pt-br');
+    const btFormat = document.getElementById('btFormat');
+    const btCalculate=document.getElementById('btCalculate');
+    const cardContainer = document.getElementById('card-container');
+
+    btFormat.addEventListener('click', createDateCard);
+    btCalculate.addEventListener('click', createTimeCard);
+  
+   function createDateCard(){
+      const data1=moment(document.getElementById("databr1").value);
+      const data2=moment(document.getElementById("databr2").value);
+      const duration = moment.duration(data2.diff(data1));
+      if (!data1.isValid() || !data2.isValid()) {
+            alert('Please enter valid dates.');
+            return;
+      }
+
+      const cardContainer= document.getElementById("card-container");
+      const content = `
+       <div class="w3-quarter w3-padding-16">
+            <div class="w3-card">
+               <header class="w3-container w3-light-grey">
+                  <h3>datetime-local</h3>
+               </header>
+               <div class="w3-container">
+                  <p>Data 1: ${data1.format("DD/MM/yyyy hh:mm")}</p>
+                  <p>Data 2: ${data2.format("DD/MM/yyyy hh:mm")}</p>
+                  <p>Duração: ${duration.hours()}</p>
+               </div>
+            </div>
+         </div>`;
+         
+         // Use the existing cardContainer reference
+         const newCard = cardContainer.insertAdjacentHTML('beforeend', content);
+   }
+
+  function createTimeCard(){
+      let startTime= document.getElementById('horabr1').value;
+      let endTime= document.getElementById('horabr2').value;
+      startTime=moment(startTime, "h:mm");
+      endTime=moment(endTime, "h:mm");
+      const duration = moment.duration(endTime.diff(startTime));
+      const   cardContainer= document.getElementById("card-container");
+      const content = `
+      <div class="w3-quarter w3-padding-16">
+         <div class="w3-card">
+            <header class="w3-container w3-light-grey">
+               <h3>Time</h3>
+            </header>
+            <div class="w3-container">
+               <p>${endTime.format("h:mm")} - ${startTime.format("h:mm")} = 
+               ${duration.hours()}:${duration.minutes()}h</p>
+            </div>
+         </div>
+      </div>`;
+   
+      // Use the existing cardContainer reference
+      const newCard = cardContainer.insertAdjacentHTML('beforeend', content);
+   }
+</script>
+</body>
+</html>
